@@ -123,7 +123,7 @@ ggplotly(line_general) #add mouse interaction
 ggsave(line_toomany,filename = here("Figures","line_chart_toomany.pdf"),width = 12,height = 9)
 ggsave(line_general,filename = here("Figures","line_chart_general.pdf"),width = 12,height = 9)
 ```
-![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/line2.png) 
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world.github.io/blob/gh-pages/bar.png)
 ![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/line1.png) 
 This section, as a whole, looks at the change in all data for all categories of causes of death over the thirty-year period from 1990 to 2019. It can be seen that some diseases have changed very little, such as whoopinng cough, and others have changed dramatically, such as HIV, cardiovascular disease. When a cause of death with a relatively large variation in the number of deaths is identified, this one cause of death can be analysed to find its root cause. The cardiovascular disease is not only the most common cause of death, but it has increased very rapidly over the last 30 years, so the next section will analyse cardiovascular disease
 
