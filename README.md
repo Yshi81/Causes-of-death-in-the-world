@@ -69,6 +69,57 @@ data_all <- data_under_5 %>%
 #fill in missing values#
 data_all[is.na(data_all)] <- 0
 
-#Adjust the order of columns
+#adjust the order of columns#
 data_all <- subset(data_all, select=c(33,1:32,34:41))  
+```
+As the causes of death vary for each age group, for example, Alzheimer's disease and cardiovascular disease are rarely found in the younger age groups. The data on the official website was divided into 5 groups，so the data needs to be reorganised and combined. This part of the code accomplishes this by doing a clear column name, adding an age column, merging the data frame, filling in missing values, and adjust the order of columns. The final total data frame ```data_all``` is obtained and the subsequent drawing process extracts the required data from ```data_all``` for drawing.  
+## Visualising the data
+### line chart
+```
+#Extract data#
+data_line <- data.frame(matrix(0,nrow=30,ncol=37)) 
+for (i in 1:40050){
+  for(k in 1990:2019) {
+if (data_all$Entity[i] == "World" && data_all$Year[i] == k){
+    data_line[k-1989,1:37] <- data_line[k-1989,1:37] + data_all[i,5:41]
+  } 
+  }
+}
+names(data_line) <- names(data_all[5:41]) #adjust the name of columns#
+data_line$Year <- c(1990:2019) #add Year column#
+
+#As the number of patients for Cardiovascular_diseases and Neoplasms is too high, the diagrams are very unclear on one sheet. So I have drawn a separate sheet for these two diseases and one for the others#
+#separate two diseases#
+data_line_toomany <- subset(data_line,select = c(Year,Cardiovascular_diseases,Neoplasms))
+data_line_general <- subset(data_line,select = -c(Cardiovascular_diseases,Neoplasms))
+
+#data gather#
+data_line_toomany <- data_line_toomany %>% 
+  gather(key = "Death", value = "Value", -Year)  
+data_line_general <- data_line_general %>% 
+  gather(key = "Death", value = "Value", -Year)  
+
+#line chart#
+line_toomany <- ggplot(data = data_line_toomany,mapping = aes(x = Year, y = Value, color=Death)) + 
+  geom_point()+
+  geom_line(size=1) +
+  xlab("Year")+ #x axis label
+  ylab("Number") + #y axis label
+  scale_y_continuous(labels = scales::scientific) + #labels using scientific notation 
+  theme_minimal() #Minimal themes
+ggplotly(line_toomany)
+
+line_general <- ggplot(data = data_line_general,mapping = aes(x = Year, y = Value, color=Death)) + 
+  geom_point()+
+  geom_line(size=1) +
+  xlab("Year")+ #x axis label
+  ylab("Number") + #y axis label
+  scale_y_continuous(labels = scales::scientific) + #labels using scientific notation 
+  guides(colour = guide_legend(ncol = 1)) + #The legend has only one column 
+  theme_minimal() #Minimal themes
+ggplotly(line_general)
+
+#save image#
+ggsave(line_toomany,filename = here("Figures","line_chart_toomany.pdf"),width = 12,height = 9)
+ggsave(line_general,filename = here("Figures","line_chart_general.pdf"),width = 12,height = 9)
 ```
