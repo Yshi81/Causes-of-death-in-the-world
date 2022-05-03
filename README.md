@@ -181,18 +181,29 @@ for (i in 1:40050){
   }#This loop may take a few minutes
   
 value$RATIO <- value$VALUE / data_map$POP_EST #Since the total number of people in each country varies, the ratios are calculated here
+
 shape <- merge(data_map, value, by = "NAME_LONG") #Combining information from map and extract data
+
 i_popup <- paste0("<strong>Country: </strong>", shape$NAME_LONG, "<br>", "<strong>Ratio: </strong>", shape$RATIO) #add mouse interaction
+
 pal <- colorBin(c("darkred", "orangered" ,"yellow", "darkgreen", "blue"), shape$RATIO, 11) #change the color
+
 map <- leaflet(shape) %>% addTiles() %>% 
   addProviderTiles("Esri.WorldStreetMap") %>% #change the background
   setView(0.000000, 0.000000, zoom = 2) %>% #methods to manipulate the map widget
   addPolygons(color = ~pal(shape$RATIO), fillOpacity = 0.8, weight = 1, popup = i_popup) %>% #highlight argument
   addLegend(pal = pal, values = shape$RATIO, position = "bottomright", title = "Data Map") #adjust legend
+
 map
-#save as .html
+
+#save as .html#
 saveWidget(map, here("Figures","map_Cardiovascular_diseases_2019.html"), selfcontained = FALSE)
 ```
+The final section generates a map of the world distribution of mortality due to cardiovascular disease, which allows the differences in mortality rates between regions to be observed. Although only one year can be plotted, any year can be plotted by modifying the parameters of the extracted data
+
+## conclusion
+Finally，I learnt a lot about generating good looking images, which will help me a lot with the images in my future papers, and reports. For all this data, I can show only a very, very small part of it on this page, the rest of the many causes of death etc. there is plenty to compare or graph to discover some important information. In fact I have also done a world map of HIV.AIDS and found that it is concentrated in the South African region.
+
 
 
 
