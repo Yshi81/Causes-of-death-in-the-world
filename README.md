@@ -196,8 +196,9 @@ map <- leaflet(shape) %>% addTiles() %>%
   setView(0.000000, 0.000000, zoom = 2) %>% #methods to manipulate the map widget
   addPolygons(color = ~pal(shape$RATIO), fillOpacity = 0.8, weight = 1, popup = i_popup) %>% #highlight argument
   addLegend(pal = pal, values = shape$RATIO, position = "bottomright", title = "Data Map") #adjust legend
-
 map
+
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world.github.io/raw/gh-pages/map.png)
 
 #save as .html#
 saveWidget(map, here("Figures","map_Cardiovascular_diseases_2019.html"), selfcontained = FALSE)
