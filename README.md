@@ -107,7 +107,7 @@ line_toomany <- ggplot(data = data_line_toomany,mapping = aes(x = Year, y = Valu
   ylab("Number") + #y axis label
   scale_y_continuous(labels = scales::scientific) + #labels using scientific notation 
   theme_minimal() #Minimal themes
-ggplotly(line_toomany)
+ggplotly(line_toomany) #add mouse interaction
 
 line_general <- ggplot(data = data_line_general,mapping = aes(x = Year, y = Value, color=Death)) + 
   geom_point()+
@@ -117,9 +117,35 @@ line_general <- ggplot(data = data_line_general,mapping = aes(x = Year, y = Valu
   scale_y_continuous(labels = scales::scientific) + #labels using scientific notation 
   guides(colour = guide_legend(ncol = 1)) + #The legend has only one column 
   theme_minimal() #Minimal themes
-ggplotly(line_general)
+ggplotly(line_general) #add mouse interaction
 
 #save image#
 ggsave(line_toomany,filename = here("Figures","line_chart_toomany.pdf"),width = 12,height = 9)
 ggsave(line_general,filename = here("Figures","line_chart_general.pdf"),width = 12,height = 9)
+```
+This section, as a whole, looks at the change in all data for all categories of causes of death over the thirty-year period from 1990 to 2019. It can be seen that some diseases have changed very little, such as whoopinng cough, and others have changed dramatically, such as HIV, cardiovascular disease. When a cause of death with a relatively large variation in the number of deaths is identified, this one cause of death can be analysed to find its root cause.
+
+### bar chart
+```
+#Extract data#
+data_bar <- data.frame(matrix(0,nrow=150,ncol=3))
+names(data_bar) <-  c("Age","Year","Cardiovascular_diseases")
+k=1
+for (i in 1:40050){
+    if (data_all$Entity[i] == "World") {
+     data_bar[k,1:3] <- data.frame(data_all$Age[i],data_all$Year[i],data_all$Cardiovascular_diseases[i])
+     k = k+1
+    } 
+  }
+
+#bar chart#
+bar_chart <- ggplot(data = data_bar, mapping = aes(x = Year, y = Cardiovascular_diseases,fill = Age)) + 
+  geom_bar(stat = 'identity',position = 'dodge') +
+  scale_fill_manual(name = 'Age',
+                    values = c('#FF4500','#9400D3','#F4A460','#90EE90','#6495ED')) + #change color
+  theme_minimal() #Minimal themes
+ggplotly(bar_chart) #add mouse interaction
+
+#save image
+ggsave(bar_chart,filename = here("Figures","bar_chart_Cardiovascular_diseases.pdf"),width = 12,height = 9)
 ```
