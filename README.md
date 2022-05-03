@@ -123,7 +123,7 @@ ggplotly(line_general) #add mouse interaction
 ggsave(line_toomany,filename = here("Figures","line_chart_toomany.pdf"),width = 12,height = 9)
 ggsave(line_general,filename = here("Figures","line_chart_general.pdf"),width = 12,height = 9)
 ```
-This section, as a whole, looks at the change in all data for all categories of causes of death over the thirty-year period from 1990 to 2019. It can be seen that some diseases have changed very little, such as whoopinng cough, and others have changed dramatically, such as HIV, cardiovascular disease. When a cause of death with a relatively large variation in the number of deaths is identified, this one cause of death can be analysed to find its root cause.
+This section, as a whole, looks at the change in all data for all categories of causes of death over the thirty-year period from 1990 to 2019. It can be seen that some diseases have changed very little, such as whoopinng cough, and others have changed dramatically, such as HIV, cardiovascular disease. When a cause of death with a relatively large variation in the number of deaths is identified, this one cause of death can be analysed to find its root cause. The cardiovascular disease is not only the most common cause of death, but it has increased very rapidly over the last 30 years, so the next section will analyse cardiovascular disease
 
 ### bar chart
 ```
@@ -149,3 +149,50 @@ ggplotly(bar_chart) #add mouse interaction
 #save image
 ggsave(bar_chart,filename = here("Figures","bar_chart_Cardiovascular_diseases.pdf"),width = 12,height = 9)
 ```
+This section uses bar charts to compare the number of deaths due to cardiovascular disease in different age groups. It is also possible to compare their differences between years. It can be seen that: 1) cardiovascular disease causes a greater number of deaths as people get older, with very few children and young people; 2) the number of deaths due to cardiovascular disease shown in the line graph rises rapidly over time, mainly from the increase in people over the age of 70.
+
+### map
+```
+#loading map#
+data_map <- read_sf(here('map','ne_10m_admin_0_countries.shp'))
+#change name match the map and data_ll
+for (i in 1:40050){
+  if (data_all$Entity[i] == "Russia") {
+    data_all$Entity[i] = "Russian Federation"
+  } else if (data_all$Entity[i] == "Democratic Republic of Congo"){
+    data_all$Entity[i] = "Democratic Republic of the Congo"
+  } else if (data_all$Entity[i] == "Congo"){
+    data_all$Entity[i] = "Republic of the Congo"
+  } else if (data_all$Entity[i] == "South Korea"){
+    data_all$Entity[i] = "Republic of Korea"
+  } else if (data_all$Entity[i] == "North Korea"){
+    data_all$Entity[i] = "Dem. Rep. Korea"
+  }
+} 
+
+#Extract data#
+value <- data.frame(NAME_LONG=data_map$NAME_LONG, VALUE = 0)
+for (i in 1:40050){
+  for (k in 1:258) {
+  if (data_all$Entity[i] == value$NAME_LONG[k] && data_all$Year[i] == 2019){
+    value$VALUE[k] = value$VALUE[k] + data_all$Cardiovascular_diseases[i]
+  } 
+  }
+  }#This loop may take a few minutes
+  
+value$RATIO <- value$VALUE / data_map$POP_EST #Since the total number of people in each country varies, the ratios are calculated here
+shape <- merge(data_map, value, by = "NAME_LONG") #Combining information from map and extract data
+i_popup <- paste0("<strong>Country: </strong>", shape$NAME_LONG, "<br>", "<strong>Ratio: </strong>", shape$RATIO) #add mouse interaction
+pal <- colorBin(c("darkred", "orangered" ,"yellow", "darkgreen", "blue"), shape$RATIO, 11) #change the color
+map <- leaflet(shape) %>% addTiles() %>% 
+  addProviderTiles("Esri.WorldStreetMap") %>% #change the background
+  setView(0.000000, 0.000000, zoom = 2) %>% #methods to manipulate the map widget
+  addPolygons(color = ~pal(shape$RATIO), fillOpacity = 0.8, weight = 1, popup = i_popup) %>% #highlight argument
+  addLegend(pal = pal, values = shape$RATIO, position = "bottomright", title = "Data Map") #adjust legend
+map
+#save as .html
+saveWidget(map, here("Figures","map_Cardiovascular_diseases_2019.html"), selfcontained = FALSE)
+```
+
+
+
