@@ -123,7 +123,8 @@ ggplotly(line_general) #add mouse interaction
 ggsave(line_toomany,filename = here("Figures","line_chart_toomany.pdf"),width = 12,height = 9)
 ggsave(line_general,filename = here("Figures","line_chart_general.pdf"),width = 12,height = 9)
 ```
-![Alt text](https://github.com/weiman152/StarsView/blob/master/ScreenShots/1.png) 
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/line2.png) 
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/line1.png) 
 This section, as a whole, looks at the change in all data for all categories of causes of death over the thirty-year period from 1990 to 2019. It can be seen that some diseases have changed very little, such as whoopinng cough, and others have changed dramatically, such as HIV, cardiovascular disease. When a cause of death with a relatively large variation in the number of deaths is identified, this one cause of death can be analysed to find its root cause. The cardiovascular disease is not only the most common cause of death, but it has increased very rapidly over the last 30 years, so the next section will analyse cardiovascular disease
 
 ### bar chart
@@ -150,6 +151,7 @@ ggplotly(bar_chart) #add mouse interaction
 #save image
 ggsave(bar_chart,filename = here("Figures","bar_chart_Cardiovascular_diseases.pdf"),width = 12,height = 9)
 ```
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/bar.png) 
 This section uses bar charts to compare the number of deaths due to cardiovascular disease in different age groups. It is also possible to compare their differences between years. It can be seen that: 1) cardiovascular disease causes a greater number of deaths as people get older, with very few children and young people; 2) the number of deaths due to cardiovascular disease shown in the line graph rises rapidly over time, mainly from the increase in people over the age of 70.
 
 ### map
@@ -200,6 +202,7 @@ map
 #save as .html#
 saveWidget(map, here("Figures","map_Cardiovascular_diseases_2019.html"), selfcontained = FALSE)
 ```
+![Alt text](https://github.com/Yshi81/Causes-of-death-in-the-world/blob/main/Figures/map.png) 
 The final section generates a map of the world distribution of mortality due to cardiovascular disease, which allows the differences in mortality rates between regions to be observed. Although only one year can be plotted, any year can be plotted by modifying the parameters of the extracted data
 
 ## conclusion
